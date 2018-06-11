@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#222"
+              tools:context=".MainMenuActivity">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/fullscreen_content"
+                android:layout_width="match_parent"
+                android:layout_height="293dp"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center"
+                android:keepScreenOn="true"
+                android:text="@string/app_name"
+                android:textColor="#e74c3c"
+                android:textSize="100sp"
+                android:textStyle="bold" />
+
+        <Button
+                android:id="@+id/startButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="#e74c3c"
+                android:fontFamily="sans-serif-condensed"
+                android:onClick="startGame"
+                android:padding="1dp"
+                android:text="start"
+                android:textColor="#222"
+                android:textStyle="normal|bold"
+                android:textAlignment="center"
+                android:textSize="21pt" />
+
+        <Button
+                android:id="@+id/quitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="#e74c3c"
+                android:fontFamily="sans-serif-condensed"
+                android:onClick="quit"
+                android:padding="1dp"
+                android:text="quit"
+                android:textColor="#222"
+                android:textStyle="normal|bold"
+                android:textAlignment="center"
+                android:textSize="21pt" />
+
+
+    </LinearLayout>
+</LinearLayout>
