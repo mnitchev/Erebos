@@ -1,6 +1,7 @@
 /.idea/
+.DS_STORE
 
->>>>>>> Initial commit
+
 # Built application files
 *.apk
 *.ap_
