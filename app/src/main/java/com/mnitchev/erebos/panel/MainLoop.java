@@ -18,7 +18,6 @@ class MainLoop implements Runnable {
         this.running = true;
     }
 
-
     @Override
     public void run() {
         while(running){

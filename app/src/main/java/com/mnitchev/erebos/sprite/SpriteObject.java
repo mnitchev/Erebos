@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
 public class SpriteObject {
     private final Drawable drawable;
 
-    public SpriteObject(Drawable drawable) {
+    public SpriteObject(Drawable drawable){
         this.drawable = drawable;
 
     }
