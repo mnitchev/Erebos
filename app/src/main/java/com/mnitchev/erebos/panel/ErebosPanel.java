@@ -2,6 +2,10 @@ package com.mnitchev.erebos.panel;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.DrawFilter;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -9,6 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.mnitchev.erebos.R;
+import com.mnitchev.erebos.agent.AgentContainer;
 import com.mnitchev.erebos.agent.Player;
 import com.mnitchev.erebos.sprite.SpriteObject;
 
@@ -17,7 +22,7 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
     public static final String TAG = "ErebosPanel";
     private MainLoop mainLoop;
     private SpriteObject background;
-    private Player player;
+    private AgentContainer container;
     private Thread mainLoopThread;
 
     public ErebosPanel(Context context) {
@@ -30,15 +35,17 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update(){
-
+        container.update();
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
+        final DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG, 0);
+        canvas.setDrawFilter(filter);
         Log.i(TAG, "Drawing");
-        this.background.draw(canvas, canvas.getClipBounds());
-        this.player.draw(canvas);
+        this.background.draw(canvas, new Point(0,0));
+        this.container.draw(canvas);
     }
 
     @Override
@@ -46,7 +53,12 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                this.player.move((int)event.getX());
+                this.container.setPlayerIsShooting(true);
+                this.container.movePlayer((int)event.getX());
+                break;
+            case MotionEvent.ACTION_UP:
+                this.container.setPlayerIsShooting(false);
+                break;
         }
         return true;
     }
@@ -55,7 +67,7 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         Log.i(TAG, "Surface created");
         final Canvas canvas = surfaceHolder.lockCanvas();
-        this.player = new Player(getContext(), canvas.getWidth(), canvas.getHeight());
+        this.container = new AgentContainer(getContext(), canvas.getWidth(), canvas.getHeight());
         surfaceHolder.unlockCanvasAndPost(canvas);
         this.mainLoop = new MainLoop(getHolder(), this);
         this.mainLoopThread = new Thread(mainLoop);
