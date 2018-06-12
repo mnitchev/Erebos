@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.mnitchev.erebos.MainMenuActivity"
+            android:name=".MainMenuActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -20,9 +20,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mnitchev.erebos.ErebosActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:screenOrientation="portrait"/>
+            android:name=".ErebosActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainMenuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mnitchev.erebos.MainMenuActivity" />
+        </activity>/>
     </application>
 
 </manifest>

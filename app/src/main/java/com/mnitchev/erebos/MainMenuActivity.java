@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,6 +14,7 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("MainMenuActivity", "Application starting");
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -34,6 +36,7 @@ public class MainMenuActivity extends Activity {
     }
 
     public void startGame(View view){
+        Log.i("MainMenuActivity", "Starting game");
         Intent myIntent = new Intent(MainMenuActivity.this, ErebosActivity.class);
         MainMenuActivity.this.startActivity(myIntent);
     }

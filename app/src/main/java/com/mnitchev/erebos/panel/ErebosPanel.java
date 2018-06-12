@@ -1,29 +1,51 @@
 package com.mnitchev.erebos.panel;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.mnitchev.erebos.R;
+import com.mnitchev.erebos.sprite.SpriteObject;
 
 public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
 
-    private static final Logger LOGGER = Logger.getLogger(ErebosPanel.class.getCanonicalName());
-    private final MainLoop mainLoop = new MainLoop();
+    public static final String TAG = "ErebosPanel";
+    private MainLoop mainLoop;
+    private SpriteObject background;
+    private SpriteObject playerSprite;
     private Thread mainLoopThread;
 
     public ErebosPanel(Context context) {
         super(context);
         setFocusable(true);
         getHolder().addCallback(this);
-
+        this.background = new SpriteObject(context.getResources().getDrawable(R.drawable.space));
+        this.playerSprite = new SpriteObject(context.getResources().getDrawable(R.drawable.erebos));
+        this.mainLoop = new MainLoop(getHolder(), this);
         this.mainLoopThread = new Thread(mainLoop);
+    }
+
+    public void update(){
+
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+        Log.i(TAG, "Drawing");
+        this.background.draw(canvas, canvas.getClipBounds());
+        this.playerSprite.draw(canvas, new Rect(0,0,158, 147));
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        Log.i(TAG, "Surface created");
+        this.mainLoop = new MainLoop(getHolder(), this);
         this.mainLoopThread = new Thread(mainLoop);
+        this.mainLoop.setRunning(true);
         this.mainLoopThread.start();
     }
 
@@ -37,7 +59,7 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
             this.mainLoop.setRunning(false);
             this.mainLoopThread.join();
         } catch (InterruptedException e) {
-            LOGGER.log(Level.SEVERE, "Failed to stop main loop thread", e);
+            Log.e(TAG, "Failed to stop main loop thread", e);
         }
     }
 
