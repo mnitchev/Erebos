@@ -3,9 +3,6 @@ package com.mnitchev.erebos.panel;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
-import com.mnitchev.erebos.render.Renderer;
-import com.mnitchev.erebos.sprite.SpriteObject;
-
 class MainLoop implements Runnable {
 
     private final ErebosPanel panel;

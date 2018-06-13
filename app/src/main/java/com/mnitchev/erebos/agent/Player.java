@@ -4,23 +4,27 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 
 import com.mnitchev.erebos.R;
 import com.mnitchev.erebos.sprite.SpriteObject;
 
-public class Player {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Player extends Agent {
 
     private static final int STARTING_OFFSET = 400;
     private static final int COUNTDOWN_DURATION = 5;
 
-    private final Point position;
-    private final SpriteObject sprite;
+    private Drawable projectileDrawable;
     private boolean isShooting;
     private int nextShotCountdown;
 
     public Player(Context context, int canvasWidth, int canvasHeight) {
-        this.sprite = new SpriteObject(context.getResources().getDrawable(R.drawable.erebos));
-        this.position = new Point(canvasWidth / 2, canvasHeight - STARTING_OFFSET);
+        super(new SpriteObject(context.getResources().getDrawable(R.drawable.erebos)),
+                new Point(canvasWidth / 2, canvasHeight - STARTING_OFFSET));
+        this.projectileDrawable = context.getResources().getDrawable(R.drawable.projectile);
         this.nextShotCountdown = 0;
         this.isShooting = false;
     }
@@ -39,7 +43,7 @@ public class Player {
         this.sprite.draw(canvas, position);
     }
 
-    public boolean canShoot(){
+    private boolean canShoot(){
         return nextShotCountdown == 0 && isShooting;
     }
 
@@ -47,12 +51,13 @@ public class Player {
         this.isShooting = isShooting;
     }
 
-    public void shoot(){
-        nextShotCountdown = COUNTDOWN_DURATION;
-    }
-
-    public Point getCenter(){
-        return new Point(position.x + sprite.getWidth() / 2, position.y);
+    public List<Projectile> shoot(){
+        final List<Projectile> shots = new ArrayList<>();
+        if (canShoot()){
+            nextShotCountdown = COUNTDOWN_DURATION;
+            shots.add(new Projectile(projectileDrawable, getCenter(), UP_DIRECTION));
+        }
+        return shots;
     }
 
 }

@@ -8,23 +8,30 @@ import android.graphics.drawable.Drawable;
 import com.mnitchev.erebos.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AgentContainer {
 
     private Player player;
     private final List<Projectile> playerProjectiles;
-    private Drawable projectileDrawable;
+    private final List<Projectile> enemyProjectiles;
+    private final List<Agent> enemies;
+    private final CollisionDetector collisionDetector;
+    private final EnemyRespawner respawner;
+    private final int canvasHeight;
 
     public AgentContainer(Context context, int canvasWidth, int canvasHeight){
+        this.canvasHeight = canvasHeight;
+        this.collisionDetector = new CollisionDetector();
         this.player = new Player(context, canvasWidth, canvasHeight);
         this.playerProjectiles = new CopyOnWriteArrayList<>();
-        this.projectileDrawable = context.getResources().getDrawable(R.drawable.projectile);
+        this.enemyProjectiles = new ArrayList<>();
+        final Drawable enemyProjectileDrawable = context.getResources().getDrawable(R.drawable.enemy_projectile);
+        this.respawner = new EnemyRespawner(context.getResources().getDrawable(R.drawable.enemy),
+                enemyProjectileDrawable, canvasWidth);
+        this.enemies = new ArrayList<>();
     }
 
     public void draw(Canvas canvas) {
@@ -33,16 +40,40 @@ public class AgentContainer {
         for (Projectile projectile : proj){
             projectile.draw(canvas);
         }
+        for (Projectile projectile : enemyProjectiles){
+            projectile.draw(canvas);
+        }
+        for (Agent enemy : enemies){
+            enemy.draw(canvas);
+        }
     }
 
     public void update(){
-        player.update();
-        shootPlayerProjectile();
+        enemies.addAll(respawner.respawn(enemies));
         final List<Projectile> proj = getPlayerProjectiles();
+        collisionDetector.collide(enemyProjectiles, player);
+        collisionDetector.collide(proj, enemies);
+        player.update();
+        playerProjectiles.addAll(player.shoot());
         for (Projectile projectile : proj) {
             projectile.update();
-            if (projectile.isOffScreen()){
+            if (projectileDestroyed(projectile)){
                 playerProjectiles.remove(projectile);
+            }
+        }
+        for (int i = 0; i < enemies.size(); i++) {
+            final Agent enemy = enemies.get(i);
+            enemy.update();
+            enemyProjectiles.addAll(enemy.shoot());
+            if(enemy.isDead()){
+                enemies.remove(i);
+            }
+        }
+        for (int i = 0; i < enemyProjectiles.size(); i++) {
+            final Projectile projectile = enemyProjectiles.get(i);
+            projectile.update();
+            if (projectileDestroyed(projectile)){
+                enemyProjectiles.remove(projectile);
             }
         }
     }
@@ -55,21 +86,13 @@ public class AgentContainer {
         player.setIsShooting(isShooting);
     }
 
-    private void shootPlayerProjectile(){
-        if (player.canShoot()){
-            player.shoot();
-            playerProjectiles.add(createPlayerProjectile());
-        }
-    }
-
-    private Projectile createPlayerProjectile(){
-        final Point playerCenter = player.getCenter();
-        return new Projectile(projectileDrawable, playerCenter);
-    }
-
     private List<Projectile> getPlayerProjectiles(){
         synchronized (playerProjectiles) {
              return Collections.unmodifiableList(new ArrayList<>(playerProjectiles));
         }
+    }
+
+    private boolean projectileDestroyed(Projectile projectile) {
+        return projectile.isDestroyed() || projectile.getPosition().y <= 0 || projectile.getPosition().y >= canvasHeight;
     }
 }

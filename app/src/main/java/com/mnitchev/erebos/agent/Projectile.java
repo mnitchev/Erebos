@@ -9,13 +9,18 @@ import com.mnitchev.erebos.sprite.SpriteObject;
 public class Projectile {
 
     private static final int STEP = 100;
+    private static final int DAMAGE = 25;
 
     private SpriteObject sprite;
     private Point position;
+    private int direction;
+    private boolean destroyed;
 
-    public Projectile(Drawable drawable, Point startPosition){
+    public Projectile(Drawable drawable, Point startPosition, int direction){
         this.sprite = new SpriteObject(drawable);
         this.position = new Point(startPosition.x - sprite.getWidth() / 2, startPosition.y);
+        this.direction = direction;
+        this.destroyed = false;
     }
 
     public void draw(Canvas canvas) {
@@ -23,13 +28,33 @@ public class Projectile {
     }
 
     public void update(){
-        if (!isOffScreen()){
-            position.y -= STEP;
+        if (!isDestroyed()){
+            position.y += direction * STEP;
         }
     }
 
-    public boolean isOffScreen(){
-        return position.y <= -sprite.getHeight();
+    public int getWidth() {
+        return sprite.getWidth();
+    }
+
+    public int getHeight(){
+        return sprite.getHeight();
+    }
+
+    public Point getPosition(){
+        return position;
+    }
+
+    public boolean isDestroyed(){
+        return destroyed;
+    }
+
+    public void destroy(){
+        destroyed = true;
+    }
+
+    public int getDamage(){
+        return DAMAGE;
     }
 
     @Override
