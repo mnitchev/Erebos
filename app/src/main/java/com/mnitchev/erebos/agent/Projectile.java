@@ -15,7 +15,7 @@ public class Projectile {
 
     public Projectile(Drawable drawable, Point startPosition){
         this.sprite = new SpriteObject(drawable);
-        this.position = startPosition;
+        this.position = new Point(startPosition.x - sprite.getWidth() / 2, startPosition.y);
     }
 
     public void draw(Canvas canvas) {
