@@ -6,21 +6,24 @@ import java.util.List;
 
 public class CollisionDetector {
 
-    public void collide(Collection<Projectile> projectiles, Agent agent){
+    public int collide(Collection<Projectile> projectiles, Agent agent){
         final List<Agent> agents = new ArrayList<>();
         agents.add(agent);
-        collide(projectiles, agents);
+        return collide(projectiles, agents);
     }
 
-    public void collide(Collection<Projectile> projectiles, Collection<Agent> agents){
+    public int collide(Collection<Projectile> projectiles, Collection<Agent> agents){
+        int collisions = 0;
         for (Projectile projectile : projectiles) {
             for (Agent agent : agents) {
                 if (areIntersecting(projectile, agent)) {
                     agent.takeDamage(projectile.getDamage());
                     projectile.destroy();
+                    collisions++;
                 }
             }
         }
+        return collisions;
     }
 
     private boolean areIntersecting(Projectile projectile, Agent agent){

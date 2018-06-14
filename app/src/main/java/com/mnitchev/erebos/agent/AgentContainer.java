@@ -14,6 +14,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AgentContainer {
 
+    private static final int POINTS = 10;
+
     private Player player;
     private final List<Projectile> playerProjectiles;
     private final List<Projectile> enemyProjectiles;
@@ -21,6 +23,7 @@ public class AgentContainer {
     private final CollisionDetector collisionDetector;
     private final EnemyRespawner respawner;
     private final int canvasHeight;
+    private int score;
 
     public AgentContainer(Context context, int canvasWidth, int canvasHeight){
         this.canvasHeight = canvasHeight;
@@ -32,6 +35,7 @@ public class AgentContainer {
         this.respawner = new EnemyRespawner(context.getResources().getDrawable(R.drawable.enemy),
                 enemyProjectileDrawable, canvasWidth);
         this.enemies = new ArrayList<>();
+        this.score = 0;
     }
 
     public void draw(Canvas canvas) {
@@ -52,7 +56,8 @@ public class AgentContainer {
         enemies.addAll(respawner.respawn(enemies));
         final List<Projectile> proj = getPlayerProjectiles();
         collisionDetector.collide(enemyProjectiles, player);
-        collisionDetector.collide(proj, enemies);
+        int collisions = collisionDetector.collide(proj, enemies);
+        score += collisions * POINTS;
         player.update();
         playerProjectiles.addAll(player.shoot());
         for (Projectile projectile : proj) {
@@ -84,6 +89,14 @@ public class AgentContainer {
 
     public void setPlayerIsShooting(boolean isShooting) {
         player.setIsShooting(isShooting);
+    }
+
+    public int getHealth(){
+        return player.getHealth();
+    }
+
+    public int getScore(){
+        return score;
     }
 
     private List<Projectile> getPlayerProjectiles(){

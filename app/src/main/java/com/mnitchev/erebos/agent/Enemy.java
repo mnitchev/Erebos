@@ -1,6 +1,5 @@
 package com.mnitchev.erebos.agent;
 
-import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 
@@ -11,22 +10,29 @@ import java.util.List;
 
 public class Enemy extends Agent {
 
-    private static final int COUNTDOWN_DURATION = 20;
-    private static final int DEFAULT_SPEED = 25;
-
-    private final int canvasWidth;
+    private static final int DAMAGE = 5;
+    private int countdownDuration;
+    private final int leftBorder;
+    private final int rightBorder;
     private int direction;
     private final int speed;
     private final Drawable projectile;
-    private int hitPoints;
 
-    public Enemy(Drawable sprite, Drawable projectile, Point startPosition, int canvasWidth){
+    public Enemy(Drawable sprite, Drawable projectile, Point startPosition, int leftBorder, int rightBorder){
         super(new SpriteObject(sprite, 0.5f, 0.5f), startPosition);
-        this.canvasWidth = canvasWidth;
-        this.speed = DEFAULT_SPEED;
+        this.leftBorder = leftBorder;
+        this.rightBorder = rightBorder;
+        this.speed = randomWithRange(1, 20);
         this.direction = -1;
         this.projectile = projectile;
-        this.hitPoints = 100;
+        this.countdownDuration = randomWithRange(15, 50);
+        this.nextShotCountdown = randomWithRange(0, countdownDuration);
+    }
+
+    private int randomWithRange(int min, int max)
+    {
+        int range = (max - min) + 1;
+        return (int)(Math.random() * range) + min;
     }
 
     public void update(){
@@ -37,10 +43,10 @@ public class Enemy extends Agent {
     }
 
     private void move() {
-        if (position.x <= 0) {
+        if (position.x <= leftBorder) {
             direction = 1;
         }
-        if (position.x + sprite.getWidth() >= canvasWidth) {
+        if (position.x + sprite.getWidth() >= rightBorder) {
             direction = -1;
         }
         position.x += direction * speed;
@@ -53,8 +59,8 @@ public class Enemy extends Agent {
     public List<Projectile> shoot() {
         final List<Projectile> shots = new ArrayList<>();
         if (canShoot()) {
-            nextShotCountdown = COUNTDOWN_DURATION;
-            shots.add(new Projectile(projectile, getCenter(), DOWN_DIRECTION));
+            nextShotCountdown = countdownDuration;
+            shots.add(new Projectile(projectile, getCenter(), DOWN_DIRECTION, randomWithRange(10, 50), DAMAGE, 0.7f));
         }
         return shots;
     }

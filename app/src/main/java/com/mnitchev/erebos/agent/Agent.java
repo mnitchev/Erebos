@@ -15,12 +15,13 @@ public abstract class Agent {
     protected final Point position;
     protected final SpriteObject sprite;
     protected int nextShotCountdown;
-    private int hitPoints;
+    protected int hitPoints;
 
     public Agent(SpriteObject sprite, Point position) {
         this.position = position;
         this.sprite = sprite;
         this.nextShotCountdown = 0;
+        this.hitPoints = 100;
     }
 
     public abstract Collection<Projectile> shoot();
@@ -48,6 +49,10 @@ public abstract class Agent {
 
     public Point getPosition() {
         return position;
+    }
+
+    public int getHealth() {
+        return hitPoints;
     }
 
     public Point getCenter(){

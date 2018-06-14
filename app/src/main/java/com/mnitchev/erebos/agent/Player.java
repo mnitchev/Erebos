@@ -14,15 +14,18 @@ import java.util.List;
 
 public class Player extends Agent {
 
-    private static final int STARTING_OFFSET = 400;
-    private static final int COUNTDOWN_DURATION = 5;
+    private static final int DAMAGE = 25;
+
+    private static final int STARTING_OFFSET = 155;
+    private static final int COUNTDOWN_DURATION = 10;
+    private static final int PROJECTILE_SPEED = 35;
 
     private Drawable projectileDrawable;
     private boolean isShooting;
     private int nextShotCountdown;
 
     public Player(Context context, int canvasWidth, int canvasHeight) {
-        super(new SpriteObject(context.getResources().getDrawable(R.drawable.erebos)),
+        super(new SpriteObject(context.getResources().getDrawable(R.drawable.erebos), 0.7f, 0.7f),
                 new Point(canvasWidth / 2, canvasHeight - STARTING_OFFSET));
         this.projectileDrawable = context.getResources().getDrawable(R.drawable.projectile);
         this.nextShotCountdown = 0;
@@ -55,7 +58,7 @@ public class Player extends Agent {
         final List<Projectile> shots = new ArrayList<>();
         if (canShoot()){
             nextShotCountdown = COUNTDOWN_DURATION;
-            shots.add(new Projectile(projectileDrawable, getCenter(), UP_DIRECTION));
+            shots.add(new Projectile(projectileDrawable, getCenter(), UP_DIRECTION, PROJECTILE_SPEED, DAMAGE, 0.7f));
         }
         return shots;
     }

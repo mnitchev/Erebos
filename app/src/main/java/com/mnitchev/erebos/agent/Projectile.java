@@ -8,19 +8,21 @@ import com.mnitchev.erebos.sprite.SpriteObject;
 
 public class Projectile {
 
-    private static final int STEP = 100;
-    private static final int DAMAGE = 25;
-
+    private int speed;
     private SpriteObject sprite;
     private Point position;
     private int direction;
     private boolean destroyed;
+    private int damage;
 
-    public Projectile(Drawable drawable, Point startPosition, int direction){
-        this.sprite = new SpriteObject(drawable);
+
+    public Projectile(Drawable drawable, Point startPosition, int direction, int speed, int damage, float scale){
+        this.sprite = new SpriteObject(drawable, scale, scale);
         this.position = new Point(startPosition.x - sprite.getWidth() / 2, startPosition.y);
         this.direction = direction;
         this.destroyed = false;
+        this.speed = speed;
+        this.damage = damage;
     }
 
     public void draw(Canvas canvas) {
@@ -29,7 +31,7 @@ public class Projectile {
 
     public void update(){
         if (!isDestroyed()){
-            position.y += direction * STEP;
+            position.y += direction * speed;
         }
     }
 
@@ -54,7 +56,7 @@ public class Projectile {
     }
 
     public int getDamage(){
-        return DAMAGE;
+        return damage;
     }
 
     @Override
