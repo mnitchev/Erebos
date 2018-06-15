@@ -6,6 +6,7 @@ import java.util.List;
 
 public class CollisionDetector {
 
+
     public int collide(Collection<Projectile> projectiles, Agent agent){
         final List<Agent> agents = new ArrayList<>();
         agents.add(agent);

@@ -58,4 +58,9 @@ public abstract class Agent {
     public Point getCenter(){
         return new Point(position.x + sprite.getWidth() / 2, position.y);
     }
+
+    protected int randomWithRange(int min, int max)     {
+        int range = (max - min) + 1;
+        return (int)(Math.random() * range) + min;
+    }
 }

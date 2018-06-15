@@ -102,6 +102,21 @@
                     android:textSize="21pt" />
 
                 <Button
+                    android:id="@+id/musicButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="#e74c3c"
+                    android:fontFamily="sans-serif-condensed"
+                    android:onClick="toggleMusic"
+                    android:padding="1dp"
+                    android:text="Music: On"
+                    android:textColor="#222"
+                    android:textStyle="normal|bold"
+                    android:textAlignment="center"
+                    android:textSize="21pt" />
+
+                <Button
                     android:id="@+id/menuButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.mnitchev.erebos.R;
 import com.mnitchev.erebos.agent.AgentContainer;
 import com.mnitchev.erebos.agent.Player;
+import com.mnitchev.erebos.sprite.Background;
 import com.mnitchev.erebos.sprite.SpriteObject;
 
 import org.w3c.dom.Text;
@@ -28,11 +29,8 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public static final String TAG = "ErebosPanel";
     private MainLoop mainLoop;
-    private SpriteObject background;
     private AgentContainer container;
     private Thread mainLoopThread;
-    private TextView scoreView;
-    private TextView healthView;
     private Runnable playerDeadCallback;
     private Runnable updateHealthCallback;
     private Runnable updateScoreCallback;
@@ -41,7 +39,6 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
         super(context, attrs);
         setFocusable(true);
         getHolder().addCallback(this);
-        this.background = new SpriteObject(context.getResources().getDrawable(R.drawable.space));
         this.mainLoop = new MainLoop(getHolder(), this);
         this.mainLoopThread = new Thread(mainLoop);
         invalidate();
@@ -49,8 +46,8 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update(){
         container.update();
-        updateScore(container.getScore());
-        updateHealth(container.getHealth());
+        updateScore();
+        updateHealth();
         verifyPlayerAlive();
     }
 
@@ -60,11 +57,11 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public void updateScore(int score){
+    public void updateScore(){
         this.updateScoreCallback.run();
     }
 
-    public void updateHealth(int health) {
+    public void updateHealth() {
         this.updateHealthCallback.run();
     }
 
@@ -73,7 +70,6 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         final DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG, 0);
         canvas.setDrawFilter(filter);
-        this.background.draw(canvas, new Point(0,0));
         this.container.draw(canvas);
     }
 
@@ -142,10 +138,6 @@ public class ErebosPanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void setUpdateHealthCallback(Runnable callback){
         this.updateHealthCallback = callback;
-    }
-
-    public void setHealthView(TextView healthView) {
-        this.healthView = healthView;
     }
 
     public int getScore(){

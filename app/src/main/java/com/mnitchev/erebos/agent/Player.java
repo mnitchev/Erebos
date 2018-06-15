@@ -29,6 +29,7 @@ public class Player extends Agent {
                 new Point(canvasWidth / 2, canvasHeight - STARTING_OFFSET));
         this.projectileDrawable = context.getResources().getDrawable(R.drawable.projectile);
         this.nextShotCountdown = 0;
+        this.hitPoints = 150;
         this.isShooting = false;
     }
 

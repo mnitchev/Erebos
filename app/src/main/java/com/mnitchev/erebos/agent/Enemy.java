@@ -29,12 +29,6 @@ public class Enemy extends Agent {
         this.nextShotCountdown = randomWithRange(0, countdownDuration);
     }
 
-    private int randomWithRange(int min, int max)
-    {
-        int range = (max - min) + 1;
-        return (int)(Math.random() * range) + min;
-    }
-
     public void update(){
         if (nextShotCountdown > 0 ){
             nextShotCountdown--;
