@@ -10,7 +10,7 @@ Here are some screenshots from the game. For more screenshots check out [images]
 
 ## Assets
 
-All the game art and music is from [opengameart.org](opengameart.org)
+All the game art and music is from [opengameart.org](https://opengameart.org)
 
-https://opengameart.org/content/pixel-explosion-12-frames
-https://opengameart.org/content/2d-spaceship-sprites-with-engines
+* https://opengameart.org/content/pixel-explosion-12-frames
+* https://opengameart.org/content/2d-spaceship-sprites-with-engines
